@@ -1,0 +1,16 @@
+{
+    "extends": "standard",
+    "plugins": [
+        "standard",
+        "promise"
+    ],
+    "rules": {
+        "indent": ["error", 2],
+        "no-invalid-regexp": 0,
+        "no-useless-escape": 0,
+        "no-extend-native": 0,
+        "comma-dangle": 0,
+        "no-console": 0,
+        "no-new": 0
+    }
+}
