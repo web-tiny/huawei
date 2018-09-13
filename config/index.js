@@ -29,8 +29,8 @@ module.exports = {
   },
 
   build: {
-    index: path.resolve(__dirname, '../huawei-h5/index.html'),
-    assetsRoot: path.resolve(__dirname, '../huawei-h5/'),
+    index: path.resolve(__dirname, '../' + config.publishDir + '/index.html'),
+    assetsRoot: path.resolve(__dirname, '../' + config.publishDir + '/'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
     productionSourceMap: true,

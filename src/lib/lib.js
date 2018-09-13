@@ -57,4 +57,28 @@ const pageSize = {
   height: document.getElementsByTagName('body')[0].getBoundingClientRect().height
 }
 
-export { userAgent, getMD, getDate, getUrlParam, pageSize }
+const isEmptyObject = subObj => {
+  if (typeof subObj === 'object') {
+    if (Array.isArray(subObj)) {
+      if (subObj.length > 0) {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      let hasProp = false
+
+      for (let prop in subObj) {
+        prop = [prop]
+        hasProp = true
+        break
+      }
+
+      return !hasProp
+    }
+  } else {
+    console.error('"' + subObj + '" type is not [object/json] or [array]!')
+  }
+}
+
+export { userAgent, getMD, getDate, getUrlParam, pageSize, isEmptyObject }
