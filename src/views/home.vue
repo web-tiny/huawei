@@ -22,34 +22,35 @@
         </div>
 
       </div>
-      <div class="main"></div>
+      <div class="main">
+        <Form></Form>
+      </div>
       <div class="button" :class="getButtonState">呼叫商务型+豪华型</div>
+      <TimePick v-if="isShow"></TimePick>
     </div>
 </template>
 
 <script>
-// {{currLocation}}
-// <Geolocation v-if="getPosition"></Geolocation>
 import { mapGetters } from 'vuex'
-import Geolocation from '../components/geolocation'
+import TimePick from '../components/timePick'
+import Form from '../components/home/form'
 
 export default {
   beforeCreate () {
-    console.log()
+
   },
   data () {
     return {
       tabs: ['专车', '包车'],
-      getPosition: false,
       buttonState: false
     }
   },
   mounted () {
     this.getPosition = true
   },
-  components: { Geolocation },
+  components: { TimePick, Form },
   computed: {
-    ...mapGetters(['type', 'currLocation']),
+    ...mapGetters(['type', 'isShow']),
     getButtonState: function () {
       return this.buttonState ? 'buttonOn' : 'buttonOff'
     }
@@ -126,26 +127,29 @@ export default {
       }
     }
   }
-  .main {
-    width: 100%;
-    height: 269px;
-    background: white;
-  }
-  .button {
-    width: 100%;
-    height: 50px;
-    display: flex;
-    font-size: 16px;
-    justify-content: center;
-    align-items: center;
-  }
-  .buttonOn {
-    color: white;
-    background: #454756;
-  }
-  .buttonOff {
-    color: #C2C3C8;
-    background: #898B94;
-  }
+}
+.main {
+  width: 100%;
+  height: 269px;
+  background: white;
+  position: relative;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.button {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  font-size: 16px;
+  justify-content: center;
+  align-items: center;
+}
+.buttonOn {
+  color: white;
+  background: #454756;
+}
+.buttonOff {
+  color: #C2C3C8;
+  background: #898B94;
 }
 </style>

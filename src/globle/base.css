@@ -94,3 +94,9 @@ button {
 body a {
     color: inherit
 }
+
+.textOverflow {
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
