@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_time@1x</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="没开启定位" transform="translate(-31.000000, -257.000000)">
+            <rect fill="#FFFFFF" x="0" y="0" width="375" height="667"></rect>
+            <g id="icon_time" transform="translate(31.000000, 257.000000)" fill="#5D5D5D" opacity="0.704397">
+                <path d="M5,9 C2.790861,9 1,7.209139 1,5 C1,2.790861 2.790861,1 5,1 C7.209139,1 9,2.790861 9,5 C9,7.209139 7.209139,9 5,9 Z M6.4390625,5.10291016 L5.12824219,5.10291016 L5.12824219,2.62470703 L4.16824219,2.62470703 L4.16824219,6.06291016 L6.4390625,6.06291016 L6.4390625,5.10291016 Z"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -32,6 +32,9 @@
 </template>
 
 <script>
+import { request } from '../lib/common.js'
+import { apiSubmitComplain } from '../apis/orderInfo.js'
+
 export default {
   props: {},
   data () {
@@ -67,16 +70,32 @@ export default {
       if (this.bad || this.detour || this.money || this.tip || this.otherQuestion) {
         return true
       } else {
-        alert('请选择您要投诉的内容')
+        alert('请选择或填写您要投诉的内容')
         return false
       }
     },
 
-    // 提交接口
+    // 提交投诉接口
     apiSubmit () {
+      this.complainContent()
+      const requestData = {
+        bad: this.bad,
+        detour: this.detour,
+        money: this.money,
+        tip: this.tip,
+        otherQuestion: this.otherQuestion
+      }
 
+      console.log(request(requestData))
+      const apiData = apiSubmitComplain(request(requestData))
     },
 
+    complainContent () {
+      this.bad && (this.bad = '司机态度恶劣')
+      this.detour && (this.detour = '司机绕路')
+      this.money && (this.money = '提前进行计费')
+      this.tip && (this.tip = '停车费，高速费和过桥费等附加费有异议')     
+    }
   },
   components: {}
 }

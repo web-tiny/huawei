@@ -2,11 +2,11 @@
   <div class="orderInfo">
    <div class="title">
      <h4>订单信息</h4>
-     <p>取消订单</p>
+     <p @click="handleCancelOrder">取消订单</p>
    </div>
    <div class="driverInfo">
      <div class="left">
-      <img src="../../static/image/titphoto.png" alt="司机头像">
+      <img src="../assets/images/titphoto.png" alt="司机头像">
       <ul>
         <li>
           <span>沪A2345</span>
@@ -19,13 +19,13 @@
         </li>
       </ul>
      </div>
-     <div class="right"><img src="../../static/image/phone.png" alt="司机电话"></div>
+     <div class="right" @click="callService"><img src="../assets/images/phone.png" alt="司机电话"></div>
    </div>
    <ul>
      <li>
        <div>
-         <span v-if="type === 0"></span>
-         <span>03-24 12:20</span>
+         <img src="../assets/images/icon_time.svg" v-if="type === 0">
+         <span>{{startTime}}</span>
        </div>
        <div>
          <span>预估价</span>
@@ -37,21 +37,35 @@
        <span>西区汽车站</span>
      </li>
      <li>
-       <span v-if="type === 0"></span>
+       <img src="../assets/images/icon_time.svg" v-if="type === 1">
        <span v-else class="date"></span>
        <span>8月9日 今天 15：00</span>
      </li>
    </ul>
-   <div class='btn'>我已上车</div>
+   <div class='btn' @click="handleGotOn">我已上车</div>
+   <customerService/>
   </div>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import { fixTime, call } from '../lib/common.js'
+import { apiOrderInfo } from '../apis/orderInfo.js'
+import customerService from '../components/customerService'
+
 export default {
   props: {},
   data () {
     return {
-      data: 'components'
+      orderId: 1234, // 订单ID
+      carNum: '', // 车牌号
+      driverName: '', // 司机姓名
+      phone: '', // 司机电话
+      preValue:'', // 预估价
+      startPlace: '', // 起始地点
+      endPlace: '', // 终点/用车时间
+      startTime: '', // 起始时间/整租时段
+      carType: '', // 车类型
     }
   },
   computed: {
@@ -59,11 +73,56 @@ export default {
       return this.$store.getters.type;
     }
   },
-  created () {},
+  created () {
+    this.apiGetData()
+  },
   mounted () {},
   watch: {},
-  methods: {},
-  components: {}
+  methods: {
+    ...mapActions(['cancelOrder']),
+    // 用户点击取消订单
+    handleCancelOrder () {
+      this.cancelOrder(this.orderId)    
+    },
+
+    // 用户点击我已上车
+    handleGotOn () {
+      this.$router.push('/orderConfirm')
+    },
+
+    // 请求订单信息接口
+    apiGetData () {
+      const apiData = apiOrderInfo (this.orderId)
+      // timestamp 后端拿到的时间戳
+      let timestamp = new Date().valueOf()
+      this.startTime = fixTime(timestamp)
+
+      // this.carNum = apiData.carNum
+      // this.driverName = apiData.driverName
+      // this.phone = apiData.phone
+      // this.preValue = apiData.preValue
+      // this.startPlace = apiData.startPlace
+      // this.endPlace = apiData.endPlace
+      // this.startTime = apiData.startTime
+      // this.carType = apiData.carType
+
+      // 30分钟后的时间戳
+      let timeout = parseInt(timestamp + 1000 * 60 * 30)/1000;
+      console.log(timeout)
+      setTimeout(() => {
+        this.$router.push('/orderConfirm')
+      }, timeout)
+
+
+      console.log('当前时间', fixTime(timestamp))
+      console.log('半小时后', fixTime(timeout))
+    },
+    callService () {
+      call(18748589067)
+    }
+    
+  },
+  components: { customerService }
 }
 </script>
 
@@ -175,6 +234,11 @@ export default {
     >li {
       span {
         vertical-align: middle;
+      }
+      img{
+        height: 11px;
+        width: 11px;
+        margin-right: 15px;
       }
     }
     >li:first-child {
