@@ -60,8 +60,6 @@ export default {
 
     // 提交 投诉问题
     handleSubmit () {
-      console.log('bad=',this.bad,'detour=',this.detour,'money=',this.money,'tip=',this.tip,'otherQuestion=',this.otherQuestion)
-
       this.isEmpty() && this.apiSubmit()
     },
 
@@ -70,7 +68,7 @@ export default {
       if (this.bad || this.detour || this.money || this.tip || this.otherQuestion) {
         return true
       } else {
-        alert('请选择或填写您要投诉的内容')
+        this.$toast({msg:'请选择或填写您要投诉的内容'})
         return false
       }
     },
@@ -85,11 +83,18 @@ export default {
         tip: this.tip,
         otherQuestion: this.otherQuestion
       }
+      console.log('投诉的内容：', request(requestData))
 
-      console.log(request(requestData))
       const apiData = apiSubmitComplain(request(requestData))
+      const success = apiData.status
+
+      if (success && success ===1) {
+        this.$toast({msg:'投诉成功'})
+      }
+      this.$toast({msg:'投诉成功'})
     },
 
+    // 选中就加上相应的内容
     complainContent () {
       this.bad && (this.bad = '司机态度恶劣')
       this.detour && (this.detour = '司机绕路')
@@ -103,16 +108,16 @@ export default {
 
 <style scoped lang="postcss">
 .complain {
-  height: 100%;
   width: 100%;
+  height: 100%;
   background: #fff;
   font-family:'PingFangSC-Medium';
 
   >p {
     font-size:16px;
     font-weight:bolder;
-    padding: 26px 0 26px 18px;
     color:rgba(52,52,52,1);
+    padding: 26px 0 26px 18px;
   }
   >ul {
     >li {
@@ -120,12 +125,12 @@ export default {
       height: 46px;
       margin: 0 auto;
       border-radius:4px;
-      color:rgba(69,69,69,1);
       position: relative;
+      color:rgba(69,69,69,1);
 
       input {
-        visibility: hidden;
         width: 0;
+        visibility: hidden;
       }
       label {
         top: 0;
@@ -170,18 +175,18 @@ export default {
     }
   }
   .footer {
-    margin-top: 60px;
     width: 100%;
+    margin-top: 60px;
     >div {
       display: flex;
       justify-content: space-around;
       button {
+        outline: 0;
         width:148px;
         height:48px;
         font-size: 16px;
-        letter-spacing: 2px;
         border-radius:24px;
-        outline: 0;
+        letter-spacing: 2px;
       }
       >button:first-child {
         color:#00BCDA;
@@ -202,5 +207,3 @@ export default {
   border: 1.3px solid #DCDCDC;
 }
 </style>
-
-

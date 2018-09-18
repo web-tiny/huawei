@@ -1,4 +1,7 @@
+import Vue from 'vue'
 import { apiCancelOrder } from '../../apis/orderInfo'
+
+const vue = new Vue()
 
 const state = {
   // 当日用户取消订单的次数
@@ -28,7 +31,7 @@ function apiGetCancelOrderNum (success, orderId) {
   if (num) {
     apiData = num
   }
-  window.alert('今日您已取消' + apiData + '次,超过5次当日不可下单')
+  vue.$toast({msg: '取消订单成功'})
   console.log('取消订单数据', responseData)
   success(apiData)
 }

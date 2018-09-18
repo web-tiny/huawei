@@ -9,59 +9,83 @@
 <template>
   <div class="mask" v-if="show">
     <div class="alertFrame">
-      <div class="msg" v-html="content"></div>
-      <div class="alertButton" @click="closeAlert">知道了</div>
+      <div class="msg" v-html="msg"></div>
+      <div class="buttomFrame" v-if="singleButton">
+          <div class="singleButton actived" @click.stop="confirm">{{confirmTxt}}</div>
+      </div>
+      <div class="buttomFrame" v-else>
+        <div class="button unactived" @click.stop="confirm">{{confirmTxt}}</div>
+        <div class="button actived" @click.stop="closeAlert">{{cancelTxt}}</div>
+      </div>
     </div>
   </div>
 </template>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 .mask {
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(0, 0, 0, .7);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-
   >.alertFrame {
-    position: relative;
     width: 289px;
-    height: 142px;
-    background: white;
+    height: 168px;
+    background: rgba(255, 255, 255, 1);
     border-radius: 4px;
-
     >.msg {
-      width: 229px;
-      height: 96px;
-      font-size: 16px;
-      color:rgba(72, 72, 72, 1);
+      width: 100%;
+      height: 114px;
+      font-size: 18px;
+      color: #484848;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
-      line-height:24px;
-      padding: 0 30px;
     }
-    >.alertButton {
-      width: 273px;
-      height: 38px;
-      background:rgba(49, 181, 230, 1);
-      border-radius: 4px;
-      margin: 0 8px;
-      font-size: 15px;
-      line-height: 21px;
-      color: white;
+    >.buttomFrame {
+      width: 100%;
+      height: 54px;
       display: flex;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
+      >.singleButton {
+        width: 266px;
+        height: 39px;
+        background-color: #31B5E6;
+        color: #ffffff;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 15px;
+      }
+      >.button {
+        width: 132px;
+        height: 37px;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 15px;
+        border-radius: 20px;
+      }
+      >.unactived {
+        border: 1px solid #00BCDA;
+        color: #00BCDA;
+      }
+      >.actived {
+        background-color: #00BCDA;
+        border: 1px solid #00BCDA;
+        color: #ffffff;
+      }
     }
   }
 }
 </style>
-
-

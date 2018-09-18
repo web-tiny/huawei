@@ -18,12 +18,13 @@ function showAlert (opt) {
     el: document.createElement('div'),
     data () {
       return {
-        content: opt.content,
-        showCancel: opt.showCancel || false,
-        cancelText: opt.cancelTxt || '取消',
-        confirmText: opt.confirmTxt,
+        msg: opt.msg,
+        cancelTxt: opt.cancelTxt,
+        confirmTxt: opt.confirmTxt,
         show: true,
-        confirmEvent: opt.onConfirm
+        cancelEvent: opt.onCancel,
+        confirmEvent: opt.onConfirm,
+        singleButton: opt.type === 'single'
       }
     },
     methods: {
@@ -34,11 +35,11 @@ function showAlert (opt) {
       confirm: function () {
         this.confirmEvent && this.confirmEvent()
         this.show = false
-      },
-      closeWindow: function () {
-        this.closeEvent && this.closeEvent()
-        this.show = false
       }
+      // closeWindow: function () {
+      //   this.closeEvent && this.closeEvent()
+      //   this.show = false
+      // }
     }
   })
 

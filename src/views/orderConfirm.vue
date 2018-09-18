@@ -1,45 +1,24 @@
 <template>
   <div class="orderConfirm">
-   <h4>订单确认</h4>
-   <p>订单完成后您的车费由企业统一支付</p>
-   <div class="driverInfo">
-     <div class="left">
-      <img src="../assets/images/titphoto.png" alt="司机头像">
-      <ul>
-        <li>
-          <span>沪A2345</span>
-          <span>5.0</span>
-        </li>
-        <li>
-          <span>出租车</span>
-          <span></span>
-          <span>王师傅</span>
-        </li>
-      </ul>
-     </div>
-     <div class="right" @click="callDriver"><img src="../assets/images/phone.png" alt="司机电话"></div>
-   </div>
-   <ul>
-     <li>
-       <div>
-         <img src="../assets/images/icon_time.svg" v-if="type === 0">
-         <span>{{ startTime }}</span>
-       </div>
-       <div>
-         <span>车费</span>
-         <span>￥121</span>
-       </div>
-     </li>
-     <li>
-       <span></span>
-       <span>西区汽车站</span>
-     </li>
-     <li>
-       <img src="../assets/images/icon_time.svg" v-if="type === 1">
-       <span v-else class="date"></span>
-       <span>8月9日 今天 15：00</span>
-     </li>
-   </ul>
+   <orderTitle :showCancelOrder="showCancelOrder">
+     <h4 slot="title">订单确认</h4>
+     <p slot="secTitle">订单完成后您的车费由企业统一支付</p>
+   </orderTitle>
+
+    <driverInfo>
+     <span slot="carNum">沪A2345</span>
+     <span slot="carType">出租车</span>
+     <span slot="driverName">王师傅</span>
+     <img slot="phone" src="../assets/images/phone.png" alt="司机电话" @click="callDriver"/>
+   </driverInfo>
+
+   <orderDetail :showPrice="showPrice" :isPreValue="isPreValue">
+     <span slot="startTime">03-24 12:34</span>
+     <span slot="startPlace">西区车站内</span>
+     <span slot="endPlace">浦东国际机场</span>
+     <span slot="price">￥123</span>
+   </orderDetail>
+
    <div class='btn' @click="handleComplete">行程结束</div>
    <div class="footer">
      <p>如果您对费用有疑问，请在3天内联系客服</p>
@@ -57,11 +36,17 @@
 import { apiOrderInfo } from '../apis/orderInfo.js'
 import { fixTime, call } from '../lib/common.js'
 import customerService from '../components/customerService'
+import orderDetail from '../components/order/orderDetail'
+import driverInfo from '../components/order/driverInfo'
+import orderTitle from '../components/order/orderTitle'
 
 export default {
   props: {},
+  components: { customerService,  orderDetail, driverInfo,  orderTitle },
   data () {
     return {
+      isPreValue: '车费',
+      showPrice: true, // 是否显示价格
       orderId: 1234, // 订单ID
       carNum: '', // 车牌号
       driverName: '', // 司机姓名
@@ -71,12 +56,10 @@ export default {
       endPlace: '', // 终点/用车时间
       startTime: '', // 起始时间/整租时段
       carType: '', // 车类型
+      showCancelOrder: false // 是否显示取消订单按钮
     }
   },
   computed: {
-    type () {
-      return this.$store.getters.type;
-    }
   },
   created () {
     this.apiGetData()
@@ -117,9 +100,6 @@ export default {
     callDriver () {
       call(18748589067)
     }
-  },
-  components: {
-    customerService
   }
 }
 </script>
@@ -144,143 +124,6 @@ export default {
     margin-left: 24px;
     color:rgba(52,52,52,1);
   }
-  .driverInfo {
-    height: 93px;
-    width: 355px;
-    display: flex;
-    font-size: 16px;
-    border-radius:4px;
-    align-items: center;
-    margin: 18px auto 18px;
-    justify-content: space-between;
-    background:rgba(255,255,255,1);
-    box-shadow:0px 0px 5px 0px rgba(0,0,0,0.09);
-
-    .left {
-      display: flex;
-      margin-left: 17px;
-      align-items: center;
-
-      >img {
-        width: 52px;
-        height: 52px;
-        margin-right: 9px;
-      }
-
-      >ul {
-        >li {
-          span {
-            vertical-align: middle;
-          }
-        }
-        >li:first-child {
-          >span:first-child {
-            font-size:18px;
-            font-weight:bolder;
-            color:rgba(52,52,52,1);
-          }
-          >span:last-child {
-            width: 14px;
-            height: 14px;
-            color:#fff;
-            font-size: 9px;
-            border-radius: 50%;
-            background: orange;
-            border:3px solid orange;
-          }
-        }
-        >li:last-child {
-          >span {
-            font-size:14px;
-            font-weight:400;
-            vertical-align: middle;
-            color:rgba(52,52,52,0.7);
-          }
-          >span:nth-of-type(2) {
-            width:2px;
-            height:13px;
-            margin: 0 6px;
-            display: inline-block;
-            border-radius: 2px;
-            background:  rgba(151,151,151,0.46);
-          }
-        }
-      }
-    }
-    .right{
-      margin-right: 25px;
-      img{
-        height: 35px;
-        width: 35px;
-      }    
-    }
-  }
-  >ul {
-    font-size: 16px;
-    padding-left: 24px;
-    padding-right: 24px;
-    color:rgba(52,52,52,1);
-
-    >li:not(:first-child) {
-      margin-top: 16px;
-    }
-    >li {
-      span {
-        vertical-align: middle;
-      }
-      img{
-        height: 11px;
-        width: 11px;
-        margin-right: 15px;
-      }
-    }
-    >li:first-child {
-      display: flex;
-      justify-content: space-between;
-      >div:first-child {
-        >span:first-child {
-          margin-right: 13px;
-        }
-      }
-      >div:last-child {
-        >span:first-child {
-          font-size: 14px;
-          color:rgba(119,119,119,1);
-        }
-        >span:last-child {
-          font-size:15px;
-          font-weight:bolder;
-          letter-spacing: -1px;
-          color:rgba(69,69,69,1);
-        }
-      }
-    }
-    li:nth-of-type(2),li:nth-of-type(3) {
-      >span:first-child {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        margin-right: 15px;
-        display: inline-block;
-      }
-    }
-    li:nth-of-type(2) {
-      >span:first-child {        
-        background: rgba(0,184,227,1);
-      }
-    }
-    li:nth-of-type(3) {
-      >span:first-child {
-        background:rgba(255,167,0,1);
-      }
-      .date{
-        height: 8px;
-        width: 8px;
-        margin-right: 15px;
-        display: inline-block;
-      }
-    }
-  }
   .btn {
     width: 327px;
     height: 50px;
@@ -289,13 +132,13 @@ export default {
     text-align: center;
     line-height: 50px;
     border-radius:2px;
-    margin: 49px auto 0;
+    margin: 30px auto 0;
     letter-spacing: 1.5px;
     color:rgba(255,255,255,1);
     background:rgba(69,71,86,1);
   }
   .footer{
-    margin-top: 37px;
+    margin-top: 30px;
     p,span {
       font-size:13px;
       font-weight:400;

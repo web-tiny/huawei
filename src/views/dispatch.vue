@@ -1,57 +1,56 @@
 <template>
   <div class="dispatch">
-   <h4>正在为您安排车辆...</h4>
-   <p>预约时间前1小时可收到车辆信息</p>
-   <ul>
-     <li>
-       <img src="../assets/images/icon_time.svg" v-if="type === 0">
-       <span>03-24 12:34</span>
-     </li>
-     <li>
-       <span class="flag"></span>
-       <span>徐汇区吴中东路西区车站</span>
-     </li>
-     <li>
-       <img src="../assets/images/icon_time.svg" v-if="type === 1">
-       <span v-else  class="flag"></span>
-       <span>浦东国际机场</span>
-     </li>
-   </ul>
+   <orderTitle :showCancelOrder="showCancelOrder">
+     <h4 slot="title">正在为您安排车辆...</h4>
+     <p slot="secTitle">预约时间前1小时可收到车辆信息</p>
+   </orderTitle>
+   
+   <orderDetail :showPrice="showPrice">
+     <span slot="startTime">03-24 12:34</span>
+     <span slot="startPlace">西区车站内</span>
+     <span slot="endPlace">浦东国际机场</span>
+   </orderDetail>
    <customerService/>
   </div>
 </template>
 
 <script>
+
 import { mapGetters } from 'vuex'
 import { apiOrderInfo, apiOrderStatus} from '../apis/orderInfo.js'
 import customerService from '../components/customerService'
+import orderDetail from '../components/order/orderDetail'
+import orderTitle from '../components/order/orderTitle'
+
 export default {
   props: {},
+  components: { customerService, orderDetail, orderTitle },
   data () {
     return {
       orderId: 1234,
       timer: null, // 定时器
       startTime: '', // 开始时间或者整租时长
       startPlace: '', // 开始地点
-      endPlace: '' // 结束地点或者用车时间
+      endPlace: '', // 结束地点或者用车时间
+      showPrice: false, // 是否显示价格
+      showCancelOrder: true // 是否显示取消按钮
     }
   },
   computed: {
-    type () {
-      return this.$store.getters.type;
-    }
   },
   created () {
-  },
-  mounted () {
+    this.getOrderInfo()
     this.checkOrderStatus()
   },
+  mounted () {},
   beforeDestroy () {
-    // 页面销毁的时候关闭定时器
+    // 页面销毁的时候清除定时器
     clearInterval(this.timer)
   },
   watch: {},
   methods: {
+
+    // 定时检查订单状态
     checkOrderStatus () {
       this.timer = setInterval( () => {
         console.log(1)
@@ -59,26 +58,28 @@ export default {
         this.getOrderStatus(this.orderId)
         let status = 1
         if (status === 1) {
-          this.$router.push('/orderInfo')
           clearInterval(this.timer)
+          this.$router.push('/orderInfo')
         }
       }, 5000)
     },
-    // 请求订单状态的api
+
+    // 检查订单状态的api
     getOrderStatus (orderId) {
       const apiData = apiOrderStatus(orderId)
       const status = apiData.status
       return status && status
     },
-    // 请求安排车俩你个信息的api
+
+    // 请求页面信息的api
     getOrderInfo () {
       const apiData = apiOrderInfo(this.orderId)
+
       this.startTime = apiData.startTime
       this.startPlace = apiData.startPlace
       this.endPlace = apiData.endPlace
     }
-  },
-  components: { customerService }
+  }
 }
 </script>
 
@@ -86,20 +87,7 @@ export default {
 .dispatch{
   height: 100%;
   width: 100%;
-  padding-top: 18px;
-  padding-left: 18px;
   background: #fff;
-  color:rgba(52,52,52,1);
-
-  h4{
-    font-size: 26px;
-    font-weight: bolder;
-  }
-
-  p{
-    font-size: 14px;
-    margin-top: 2px;
-  }
 
   ul{
     font-size: 16px;
